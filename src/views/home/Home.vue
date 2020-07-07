@@ -1,11 +1,14 @@
 <template>
-  <div id="home">
+  <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners='banners'/>
-    <recommend-view :recommends='recommends'/>
-    <feature-view />
-    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
-    <goods-list :goods="shouGoods" />
+
+    <scroll class="content1">
+      <home-swiper :banners='banners'/>
+      <recommend-view :recommends='recommends'/>
+      <feature-view />
+      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+      <goods-list :goods="shouGoods" />
+    </scroll>
 
     <ul>
       <li>列表1</li>
@@ -117,6 +120,7 @@ import NavBar from 'components/common/navbar/NavBar'
 import HomeSwiper from './childComps/HomeSwiper'
 import RecommendView from './childComps/RecommendView'
 import FeatureView from './childComps/FeatureView' 
+import Scroll from 'components/common/scroll/Scroll'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
 import {getHomeMultidata,getHomeGoods} from 'network/home'
@@ -129,7 +133,8 @@ export default {
     RecommendView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll
   },
   data(){
     return{
@@ -199,6 +204,10 @@ export default {
 </script>
 
 <style>
+  #home{
+    height: 100vh;
+    /* position: relative; */
+  }
   .home-nav{
     background-color: var(--color-tint);
     color: #fff;
@@ -211,5 +220,15 @@ export default {
   .tab-control{
     position: sticky;
     top: 43px;
+  }
+  /* .content1{
+    position: absolute;
+    overflow: hidden;
+    top: 44px;
+    bottom: 49px;
+  } */
+  .content1{
+    height: calc(100% - 93px);
+    overflow: hidden;
   }
 </style>
