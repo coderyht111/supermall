@@ -2,13 +2,15 @@
   <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content1">
+    <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll">
       <home-swiper :banners='banners'/>
       <recommend-view :recommends='recommends'/>
       <feature-view />
       <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
       <goods-list :goods="shouGoods" />
     </scroll>
+
+    <back-top @click.native='backClick' v-show="isShow"/>
 
     <ul>
       <li>列表1</li>
@@ -123,6 +125,7 @@ import FeatureView from './childComps/FeatureView'
 import Scroll from 'components/common/scroll/Scroll'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
+import BackTop from 'components/content/backTop/BackTop'
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 
 export default {
@@ -134,7 +137,8 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    BackTop
   },
   data(){
     return{
@@ -146,7 +150,8 @@ export default {
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]}
       },
-      currentType:'pop'
+      currentType:'pop',
+      isShow:false
     }
   },
   computed:{
@@ -175,7 +180,15 @@ export default {
         case 2:this.currentType='sell';break
       }
     },
-
+    backClick(){
+      this.$refs.scroll.scroll.scrollTo(0,0,500)
+      
+    },
+    contentScroll(position){
+      // console.log(position);
+      this.isShow = (-position.y)>1000
+      
+    },
 
 
 
@@ -219,7 +232,7 @@ export default {
   }
   .tab-control{
     position: sticky;
-    top: 43px;
+    top: 44px;
   }
   /* .content1{
     position: absolute;
