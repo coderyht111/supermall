@@ -2,7 +2,7 @@
   <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll">
+    <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll" :pullUpLoad="true" @pullingUp="loadMore">
       <home-swiper :banners='banners'/>
       <recommend-view :recommends='recommends'/>
       <feature-view />
@@ -189,12 +189,16 @@ export default {
       this.isShow = (-position.y)>1000
       
     },
-
+    loadMore(){
+      // console.log('上拉加载更多');
+      this.getHomeGoods(this.currentType)
+      this.$refs.scroll.scroll.refresh()
+    },
 
 
 
     /**
-     * 网络请求的方法发
+     * 网络请求的方法
      */
     getHomeMultidata(){
        getHomeMultidata().then(res=>{

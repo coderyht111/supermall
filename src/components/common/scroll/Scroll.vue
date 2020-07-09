@@ -14,6 +14,10 @@ export default {
     probeType:{
       type:Number,
       default:0
+    },
+    pullUpLoad:{
+      type:Boolean,
+      default:false
     }
   },
   data(){
@@ -25,7 +29,7 @@ export default {
     this.scroll=new BScroll(this.$refs.wrapper,{
       probeType:this.probeType,
       click:true,
-      pullUpLoad:true
+      pullUpLoad:this.pullUpLoad
     })
 
     this.scroll.on('scroll',(position)=>{
@@ -36,7 +40,8 @@ export default {
     this.scroll.scrollTo(0,0)
 
     this.scroll.on('pullingUp',()=>{
-      console.log('上拉加载成功');
+      // console.log('上拉加载成功');
+      this.$emit('pullingUp')
 
       setTimeout(() => {
         this.scroll.finishPullUp()
