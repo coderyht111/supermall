@@ -3,16 +3,16 @@
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
     <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll" :pullUpLoad="true" @pullingUp="loadMore">
-      <home-swiper :banners='banners'/>
+      <home-swiper :banners='banners' ref="hSwiper"/>
       <recommend-view :recommends='recommends'/>
       <feature-view />
-      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl"/>
       <goods-list :goods="shouGoods" />
     </scroll>
 
     <back-top @click.native='backClick' v-show="isShow"/>
 
-    <ul>
+    <!-- <ul>
       <li>列表1</li>
       <li>列表2</li>
       <li>列表3</li>
@@ -113,7 +113,7 @@
       <li>列表98</li>
       <li>列表99</li>
       <li>列表100</li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -151,7 +151,9 @@ export default {
         'sell':{page:0,list:[]}
       },
       currentType:'pop',
-      isShow:false
+      isShow:false,
+      isTabFixed: false,
+      tabOffsetTop: 0,
     }
   },
   computed:{
@@ -160,6 +162,8 @@ export default {
     }
   },
   created(){
+
+    console.log('创建Home');
     //请求多个数据
     this.getHomeMultidata()
 
@@ -174,6 +178,16 @@ export default {
       
     // })
   },
+  activated: function () {
+      this.$refs.hSwiper.startTimer()
+    },
+    deactivated: function () {
+      this.$refs.hSwiper.stopTimer()
+    },
+  updated() {
+      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+      // console.log(this.tabOffsetTop);
+    },
   methods:{
     /**
      * 事件监听的方法
@@ -191,8 +205,12 @@ export default {
       
     },
     contentScroll(position){
+      // 1.决定tabFixed是否显示
+      this.isTabFixed = position.y < -this.tabOffsetTop
+
       // console.log(position);
-      this.isShow = (-position.y)>1000
+      this.isShow = position.y < -1000
+      
       
     },
     loadMore(){
@@ -212,6 +230,10 @@ export default {
         // this.result=res
         this.banners=res.data.banner.list;
         this.recommends=res.data.recommend.list;
+        // 下次更新DOM时,获取新的tabOffsetTop值(不保险,可以在updated钩子中获取)
+          this.$nextTick(() => {
+            this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+          })
       })
     },
     getHomeGoods(type){
@@ -240,10 +262,7 @@ export default {
     right: 0;
     z-index: 999;
   }
-  .tab-control{
-    position: sticky;
-    top: 44px;
-  }
+ 
   /* .content1{
     position: absolute;
     overflow: hidden;
