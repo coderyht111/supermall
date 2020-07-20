@@ -1,7 +1,8 @@
 <template>
   <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-
+    <tab-control v-show="isTabFixed" class="fixed" @tabClick="tabClick"
+                 :titles="['流行', '新款', '精选']"></tab-control>
     <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll" :pullUpLoad="true" @pullingUp="loadMore">
       <home-swiper :banners='banners' ref="hSwiper"/>
       <recommend-view :recommends='recommends'/>
@@ -262,7 +263,12 @@ export default {
     right: 0;
     z-index: 999;
   }
- 
+ .fixed {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+  }
   /* .content1{
     position: absolute;
     overflow: hidden;

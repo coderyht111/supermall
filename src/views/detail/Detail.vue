@@ -6,18 +6,22 @@
         <detail-base-info :goods='goods'/>
         <detail-shop-info :shop='shop'/>
         <!-- <detail-goods-info :detail-info='detailInfo' /> -->
+        <detail-param-info :param-info='paramsInfo'/>
+        <detail-comment-info :comment-info='commentInfo'/>
       </scroll>
   </div>
 </template>
 
 <script>
 import DetailNavBar from "./childComps/DetailNavBar";
-import {getDetail,Goods,Shop} from 'network/detail'
+import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'
 import DetailSwiper from './childComps/DetailSwiper'
 import Scroll from 'components/common/scroll/Scroll'
 import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
+import DetailParamInfo from './childComps/DetailParamInfo'
+import DetailCommentInfo from './childComps/DetailCommentInfo'
 
 
 export default {
@@ -29,7 +33,9 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     Scroll,
-    DetailGoodsInfo
+    DetailGoodsInfo,
+    DetailParamInfo,
+    DetailCommentInfo
   },
   data(){
     return {
@@ -37,7 +43,9 @@ export default {
       topImages:[],
       goods:{},
       shop:{},
-      detailInfo:{}
+      detailInfo:{},
+      paramsInfo:{},
+      commentInfo:{}
     }
   },
   // methods:{
@@ -61,6 +69,14 @@ export default {
 
       //保存商品的详情数据
       this.detailInfo=data.detailInfo
+
+      //获取参数信息
+      this.paramsInfo = new GoodsParam(data.itemParams.info,data.itemParams.rule)
+
+      //获取评论信息
+      if(data.rate.cRate!==0){
+        this.commentInfo=data.rate.list[0]
+      }
     })
     
     
