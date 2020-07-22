@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="dnb" />
+    <detail-nav-bar class="dnb" @itemClick='itemClick'/>
       <scroll class="content1" ref="scroll">
         <detail-swiper :top-images='topImages'/>
         <detail-base-info :goods='goods'/>
         <detail-shop-info :shop='shop'/>
         <!-- <detail-goods-info :detail-info='detailInfo' /> -->
-        <detail-param-info :param-info='paramsInfo'/>
-        <detail-comment-info :comment-info='commentInfo'/>
-        <goods-list :goods='recommend'/>
+        <detail-param-info ref="params" :param-info='paramsInfo'/>
+        <detail-comment-info ref="comment" :comment-info='commentInfo'/>
+        <goods-list ref="recommend" :goods='recommend'/>
       </scroll>
   </div>
 </template>
@@ -49,7 +49,14 @@ export default {
       detailInfo:{},
       paramsInfo:{},
       commentInfo:{},
-      recommend:[]
+      recommend:[],
+      themeTopYs:[]
+    }
+  },
+  methods:{
+    itemClick(index){
+      // console.log(index);
+      this.$refs.scroll.scroll.scrollTo(0,-this.themeTopYs[index],500)
     }
   },
   // methods:{
@@ -81,6 +88,15 @@ export default {
       if(data.rate.cRate!==0){
         this.commentInfo=data.rate.list[0]
       }
+
+      this.$nextTick(()=>{
+        this.themeTopYs=[]
+        this.themeTopYs.push(0)
+        this.themeTopYs.push(this.$refs.params.$el.offsetTop-44)
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop-44)
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop-46)
+        console.log(this.themeTopYs);
+      })
     })
     //请求推荐数据
     getRecommend().then(res=>{
@@ -88,6 +104,12 @@ export default {
       this.recommend=res.data.list
     })
     
+    
+  },
+  mounted(){
+    
+  },
+  updated(){
     
   }
 }

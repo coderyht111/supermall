@@ -48,7 +48,7 @@ export default {
   .goods-item img {
     width: 100%;
     border-radius: 5px;
-    border:3px solid var(--color-tint);
+    /* border:3px solid var(--color-tint); */
   }
 
   .goods-info {
