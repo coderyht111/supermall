@@ -2,7 +2,7 @@
   <div id="home" class="wrapper">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
     <tab-control v-show="isTabFixed" class="fixed" @tabClick="tabClick"
-                 :titles="['流行', '新款', '精选']"></tab-control>
+                 :titles="['流行', '新款', '精选']" ref="toptabControl"></tab-control>
     <scroll class="content1" ref="scroll" :probeType='3' @scroll="contentScroll" :pullUpLoad="true" @pullingUp="loadMore">
       <home-swiper :banners='banners' ref="hSwiper"/>
       <recommend-view :recommends='recommends'/>
@@ -200,6 +200,8 @@ export default {
         case 1:this.currentType='new';break
         case 2:this.currentType='sell';break
       }
+      this.$refs.toptabControl.indexActive=index
+      this.$refs.tabControl.indexActive=index
     },
     backClick(){
       this.$refs.scroll.scroll.scrollTo(0,0,500)
